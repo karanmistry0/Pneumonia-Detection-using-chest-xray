@@ -23,6 +23,7 @@ A Flask web application is used to deploy the trained model, enabling users to u
 - Python
 - TensorFlow/Keras for CNN model development
 - Flask for web application deployment
+- HTML and CSS for web page development
 - Dataset: [Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia)
 
 ## Model Performance
@@ -34,8 +35,8 @@ The CNN model achieved the following performance metrics:
 ## Setup Instructions
 1. Clone the repository:
    ```bash
-   git clone <repository_url>
-   cd <repository_name>
+   git clone "https://github.com/shubham15400/Machine_Learning_Framework/"
+   cd Machine_Learning_Framework
    ```
 2. Install the required dependencies:
    ```bash

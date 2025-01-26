@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pneumonia Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('background.jpeg'); /* Replace with your image URL or path */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 50%;
+            max-width: 500px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Optional shadow */
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: rgba(249, 249, 249, 0.8);
+            border-radius: 8px;
+            text-align: left;
+        }
+        .result-key {
+            font-weight: bold;
+            color: #333;
+        }
+        .result-value {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pneumonia Detection</h1>
+        <p>Select an image to check for pneumonia.</p>
+        <p><input type="file" id="imageInput" accept="image/*"></p>
+        <p><button onclick="uploadImage()">Upload and Predict</button></p>
+        <div id="result"></div>
+    </div>
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+            const resultDiv = document.getElementById('result');
+
+            if (!file) {
+                alert('Please select an image to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                displayResult(result);
+            } catch (error) {
+                console.error('Fetch error:', error);
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Clear previous content
+
+            for (const [key, value] of Object.entries(result)) {
+                const keyElement = document.createElement('p');
+                const valueElement = document.createElement('p');
+
+                keyElement.className = 'result-key';
+                valueElement.className = 'result-value';
+
+                keyElement.textContent = `${key}`;
+                valueElement.textContent = `${value}`;
+
+                resultDiv.appendChild(keyElement);
+                resultDiv.appendChild(valueElement);
+            }
+        }
+    </script>
+</body>
+</html>
